@@ -1,0 +1,22 @@
+#logo {
+  width: 135px;
+}
+
+.nav-item:hover {
+  cursor: pointer;
+}
+
+.no-decor:hover {
+  text-decoration: none;
+}
+
+@media screen and (min-width: 576px) {
+  #logo {
+    width: 185px;
+  }
+
+  .nav-item {
+    font-size: 1.2em;
+    padding: 5px;
+  }
+}
