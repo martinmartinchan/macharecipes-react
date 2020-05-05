@@ -6,26 +6,30 @@ class SearchBar extends Component {
 	}
 
   handleKeyPress(e) {
-		if (e.keyCode == 13) {
+		if (e.key === 'Enter') {
       const matchedList = this.props.recipes.filter(recipe => {
-        this.props.onSearch(recipe.name.toLowerCase().includes(e.target.value.toLowerCase()));
+        return recipe.name.toLowerCase().includes(e.target.value.toLowerCase());
       });
       if (matchedList.length === 1) {
         const recipeToShow = matchedList[0];
-        this.props.onFound(recipeToShow);
+        this.props.showRecipe(recipeToShow);
       }
       e.preventDefault();
     }
 	}
 
 	handleKeyUp(e) {
-		if (e.keyCode == 13) {
+		if (e.key === 'Enter') {
 			return;
 		}
 		const matchedList = this.props.recipes.filter(recipe => {
 			return recipe.name.toLowerCase().includes(e.target.value.toLowerCase());
 		});
-		this.props.onSearch(matchedList);
+		if (e.target.value === "") {
+			this.props.setShowFiltered(false, {});
+		} else {
+			this.props.setShowFiltered(true, matchedList);
+		}
 		e.preventDefault();
 	}
     

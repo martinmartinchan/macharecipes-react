@@ -32,12 +32,18 @@
   cursor: pointer;
 }
 
-.no-decor:hover {
-  text-decoration: none;
-}
-
 .cursor-pointer:hover {
   cursor: pointer;
+}
+
+.no-decor {
+  text-decoration: none;
+  color: inherit;
+}
+
+.no-decor:hover {
+  text-decoration: none;
+  color: inherit;
 }
 
 @media screen and (min-width: 576px) {
