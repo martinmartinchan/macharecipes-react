@@ -46,6 +46,16 @@
   color: inherit;
 }
 
+.btn-primary {
+  background-color: rgba(60, 198, 36, 1) !important;
+  border-color: rgba(60, 198, 36, 1) !important;
+}
+
+.btn-primary:hover {
+  background-color: rgba(55, 181, 33, 1) !important;
+  border-color: rgba(55, 181, 33, 1) !important;
+}
+
 @media screen and (min-width: 576px) {
   #logo {
     width: 185px;

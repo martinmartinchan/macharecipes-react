@@ -44,6 +44,7 @@ class App extends Component {
   }
 
   showRecipe(recipe) {
+    window.location.pathname = `/recipe/${recipe.name}`;
   }
 
   render() {
