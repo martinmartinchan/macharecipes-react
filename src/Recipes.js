@@ -46,22 +46,18 @@ class Recipes extends Component {
 		if (this.state.showFiltered) {
 			listedRecipes = this.state.filteredRecipes;
 		}
-		if (this.props.loading) {
-			return <div id="spin"></div>;
-		} else {
-			return (
-				<div>
-					<SearchBar
-					recipes = {this.props.recipes}
-					setShowFiltered = {(showFiltered, recipes) => this.setShowFiltered(showFiltered, recipes)}
-					showRecipe = {(recipe) => this.showRecipe(recipe)}
-					/>
-					<RecipeList 
-						recipes = {listedRecipes}
-					/>
-				</div>
-			)
-		}
+		return (
+			<div>
+				<SearchBar
+				recipes = {this.props.recipes}
+				setShowFiltered = {(showFiltered, recipes) => this.setShowFiltered(showFiltered, recipes)}
+				showRecipe = {(recipe) => this.showRecipe(recipe)}
+				/>
+				<RecipeList 
+					recipes = {listedRecipes}
+				/>
+			</div>
+		)
 	}
 }
 
