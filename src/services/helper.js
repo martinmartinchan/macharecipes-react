@@ -18,3 +18,8 @@ export function getEmptyRecipe() {
 		],
 	}
 }
+
+export function checkRecipeValidity(recipe) {
+	// TODO
+	return true;
+}

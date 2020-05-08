@@ -75,7 +75,7 @@ class AddRecipe extends Component {
 	}
 
 	submitRecipe(e) {
-		console.log(this.props.recipe);
+		this.props.submitRecipe();
 		e.preventDefault();
 	}
 
