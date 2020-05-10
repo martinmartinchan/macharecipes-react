@@ -20,6 +20,31 @@ export function getEmptyRecipe() {
 }
 
 export function checkRecipeValidity(recipe) {
-	// TODO
-	return true;
+	let success = true;
+	if (recipe.name === "") {
+		success = false;
+	}
+	if (recipe.servings === "" || recipe.servings === 0) {
+		success = false;
+	}
+	if (recipe.ingredients.length === 0) {
+		success = false;
+	}
+	recipe.ingredients.forEach(ing => {
+		if (ing.name === "") {
+			success = false;
+		}
+		if (ing.amount === "") {
+			success = false;
+		}
+	});
+	if (recipe.instructions.length === 0) {
+		success = false;
+	}
+	recipe.instructions.forEach(inst => {
+		if (inst.instruction === "") {
+			success = false;
+		}
+	});
+	return success
 }

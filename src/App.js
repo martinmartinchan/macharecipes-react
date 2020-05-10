@@ -11,16 +11,49 @@ import { getEmptyRecipe, checkRecipeValidity } from './services/helper';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.getAllRecipes();
+    // If there is a status message saved in the sessionStorage, it means we should show it and it is a success
     this.state = {
       loading: true,
       recipes: {},
       addRecipe: getEmptyRecipe(),
+      status: {
+        showing: false,
+        message: '',
+        success: false,
+      },
     }
   }
 
-  showStatus() {
-    // TODO
+  componentDidMount() {
+    // Retrieve all recipes from database
+    this.getAllRecipes();
+    // If there is a status message saved in the sessionStorage, it means we should show it and it is a success
+    const statusMessage = sessionStorage.getItem('statusMessage');
+    if (statusMessage) {
+      this.showStatus(true, statusMessage);
+    }
+  }
+
+  // Sets the status for 5 seconds
+  showStatus(success, message){
+    this.setState({
+      status: {
+        showing: true,
+        message: message,
+        success: success,
+      },
+    });
+    setTimeout(() => {
+      // Remove status message if this came from the sessionStorage
+      sessionStorage.removeItem('statusMessage');
+      this.setState({
+        status: {
+          showing: false,
+          message: '',
+          success: false,
+        },
+      });
+    }, 5000);
   }
 
   getAllRecipes() {
@@ -46,19 +79,53 @@ class App extends Component {
       }, () => {
         addRecipe(this.state.addRecipe)
         .then(data => {
-          this.showRecipe(this.state.addRecipe)
-          this.setState({
-            loading: false,
-            recipes: data.result,
-            addRecipe: getEmptyRecipe(),
-          });
+          if (data.success) {
+            // We will refresh page after this and thus, sessionStorage needs to be set to show status after refresh
+            sessionStorage.setItem("statusMessage", data.message);
+            this.showRecipe(this.state.addRecipe);
+          } else {
+            this.setState({
+              loading: false,
+            });
+            this.showStatus(false, data.message);
+          }
         })
         .catch(err => console.log(err));
       });
     } else {
-      // TODO
-      this.showStatus();
+      this.setState({
+        loading: false,
+      });
+      this.showStatus(false, "Recipe must contain name, number of servings, at least one non-empty ingredient and at least one non-empty instruction.");
     }
+  }
+
+  deleteRecipe(recipe) {
+    const recipeName = {name: recipe.name}
+    this.setState({
+      loading: true,
+    }, () => {deleteRecipe(recipeName)
+      .then(data => {
+        console.log(data);
+        if(data.success) {
+          sessionStorage.setItem("statusMessage", data.message);
+          this.setState({
+            loading: false,
+          });
+          window.location.pathname = '/';
+        } else {
+          this.setState({
+            loading: false,
+          });
+          this.showStatus(false, data.message);
+        }
+      })
+      .catch(err => console.log(err));
+    });
+  }
+
+  editRecipe(recipe) {
+
   }
 
   showRecipe(recipe) {
@@ -66,6 +133,13 @@ class App extends Component {
   }
 
   render() {
+    let status = null;
+    if (this.state.status.showing) {
+      let statusClass = this.state.status.success ? "alert alert-success text-center" : "alert alert-danger text-center";
+      status = <div className={statusClass} role="alert">
+        {this.state.status.message}
+      </div>
+    }
     let content = null;
     if (this.state.loading) {
       content = <div id="spin"></div>;
@@ -95,6 +169,9 @@ class App extends Component {
           exact render = {
             (routerProps) => <SingleRecipe
               {...routerProps}
+              recipes = {this.state.recipes}
+              deleteRecipe = {(recipe) => this.deleteRecipe(recipe)}
+              editRecipe = {(recipe) => editRecipe(recipe)}
             />
           }
         />
@@ -114,6 +191,7 @@ class App extends Component {
                 Add Recipe
             </Link>
           </div>
+          {status}
           {content}
         </div>
       </Router>

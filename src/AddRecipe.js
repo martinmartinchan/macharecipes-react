@@ -74,11 +74,6 @@ class AddRecipe extends Component {
 		return recipe;
 	}
 
-	submitRecipe(e) {
-		this.props.submitRecipe();
-		e.preventDefault();
-	}
-
 	render() {
 		let ingredients = [];
 		ingredients.push(<div key={0} className="form-row flex-nowrap">
@@ -197,7 +192,7 @@ class AddRecipe extends Component {
 				</div>
 
 				<div className="d-flex flex-column align-items-end">
-					<button className="btn btn-primary" type="submit" onClick={e => this.submitRecipe(e)}>Add Recipe</button>	
+					<button className="btn btn-primary" type="submit" onClick={() => this.props.submitRecipe()}>Add Recipe</button>	
         </div>
 			</form>
 		</div>;
