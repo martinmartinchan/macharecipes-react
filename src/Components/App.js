@@ -5,8 +5,8 @@ import Recipes from './Recipes';
 import AddRecipe from './AddRecipe';
 import EditRecipe from './EditRecipe';
 import SingleRecipe from './SingleRecipe';
-import {get, addRecipe, deleteRecipe, editRecipe} from './services/db_handler';
-import { getEmptyRecipe, checkRecipeValidity } from './services/helper';
+import {get, addRecipe, deleteRecipe, editRecipe} from './../services/db_handler';
+import { getEmptyRecipe, checkRecipeValidity } from './../services/helper';
 
 class App extends Component {
   constructor(props) {
@@ -100,6 +100,34 @@ class App extends Component {
     }
   }
 
+  submitEditRecipe(oldRecipeName, newRecipe) {
+    if (checkRecipeValidity(newRecipe)) {
+      this.setState({
+        loading: true,
+      }, () => {
+        editRecipe(oldRecipeName, newRecipe)
+        .then(data => {
+          if (data.success) {
+            // We will refresh page after this and thus, sessionStorage needs to be set to show status after refresh
+            sessionStorage.setItem("statusMessage", data.message);
+            this.showRecipe(newRecipe);
+          } else {
+            this.setState({
+              loading: false,
+            });
+            this.showStatus(false, data.message);
+          }
+        })
+        .catch(err => console.log(err));
+      });
+    } else {
+      this.setState({
+        loading: false,
+      });
+      this.showStatus(false, "Recipe must contain name, number of servings, at least one non-empty ingredient and at least one non-empty instruction.");
+    }
+  }
+
   deleteRecipe(recipe) {
     const recipeName = {name: recipe.name}
     this.setState({
@@ -125,7 +153,7 @@ class App extends Component {
   }
 
   editRecipe(recipe) {
-
+    window.location.pathname = `/edit/${recipe.name}`;
   }
 
   showRecipe(recipe) {
@@ -171,7 +199,17 @@ class App extends Component {
               {...routerProps}
               recipes = {this.state.recipes}
               deleteRecipe = {(recipe) => this.deleteRecipe(recipe)}
-              editRecipe = {(recipe) => editRecipe(recipe)}
+              editRecipe = {(recipe) => this.editRecipe(recipe)}
+            />
+          }
+        />
+        <Route
+          path = "/edit/:name"
+          exact render = {
+            (routerProps) => <EditRecipe
+              {...routerProps}
+              recipes = {this.state.recipes}
+              submitRecipe = {(oldRecipeName, newRecipe) => this.submitEditRecipe(oldRecipeName, newRecipe)}
             />
           }
         />
@@ -182,7 +220,7 @@ class App extends Component {
         <div className="container mb-5">
           <div className="navbar align-middle navbar-expand bg-dark">
             <Link to = "/" className="no-decor nav-item navbar-nav mr-auto text-white">
-              <img id="logo" src={'logo.png'} alt="Logo"/>
+              <img id="logo" src='/logo.png' alt="Logo"/>
             </Link>
             <Link to = "/" className="no-decor nav-item navbar-nav ml-3 text-white">
                 Recipes

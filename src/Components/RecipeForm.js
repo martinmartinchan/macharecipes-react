@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
-class AddRecipe extends Component {
-	constructor(props) {
-		super(props);
-	}
-
+class RecipeForm extends Component {
 	changeRecipe(e, fn) {
 		let oldRecipe = this.props.recipe;
 		let newRecipe = fn(oldRecipe);
@@ -163,40 +159,34 @@ class AddRecipe extends Component {
 		</div>
 		);
 
-		return <div className="container mt-5 mx-auto">
-			<form>
-				<div className="form-group col-sm-12">
-					<label htmlFor="recipe-name">Recipe Name</label>
-					<input value={this.props.recipe.name} onChange={e => this.changeRecipe(e, recipe => {return this.handleChangeName(recipe, e.target.value)})} className="form-control" placeholder="Enter recipe name"></input>
+		return <div>
+			<div className="form-group col-sm-12">
+				<label htmlFor="recipe-name">Recipe Name</label>
+				<input value={this.props.recipe.name} onChange={e => this.changeRecipe(e, recipe => {return this.handleChangeName(recipe, e.target.value)})} className="form-control" placeholder="Enter recipe name"></input>
+			</div>
+
+			<div>
+				<div className="form-group col-6 col-md-3">
+					<label htmlFor="servings">Servings</label>
+					<input type="number" value={this.props.recipe.servings} onChange={e => this.changeRecipe(e, recipe => {return this.handleChangeServings(recipe, e.target.value)})} className="form-control" placeholder="Enter number of servings"></input>
 				</div>
+			</div>
 
-				<div>
-					<div className="form-group col-6 col-md-3">
-						<label htmlFor="servings">Servings</label>
-						<input type="number" value={this.props.recipe.servings} onChange={e => this.changeRecipe(e, recipe => {return this.handleChangeServings(recipe, e.target.value)})} className="form-control" placeholder="Enter number of servings"></input>
-					</div>
-        </div>
+			<div className="form-group col-12">
+				<label htmlFor="recipe-description">Description</label>
+				<textarea value={this.props.recipe.description} onChange={e => this.changeRecipe(e, recipe => {return this.handleChangeDescription(recipe, e.target.value)})} className="form-control" rows="3" placeholder="Enter description"></textarea>
+			</div>
 
-				<div className="form-group col-12">
-          <label htmlFor="recipe-description">Description</label>
-          <textarea value={this.props.recipe.description} onChange={e => this.changeRecipe(e, recipe => {return this.handleChangeDescription(recipe, e.target.value)})} className="form-control" rows="3" placeholder="Enter description"></textarea>
-        </div>
-
-				<div className="small-width mx-auto">
-					{ingredients}
-				</div>
-				
-				<div className="small-width mx-auto">
-					<label htmlFor="instruction-input">Instructions</label>
-					{instructions}
-				</div>
-
-				<div className="d-flex flex-column align-items-end">
-					<button className="btn btn-primary" type="submit" onClick={() => this.props.submitRecipe()}>Add Recipe</button>	
-        </div>
-			</form>
+			<div className="small-width mx-auto">
+				{ingredients}
+			</div>
+			
+			<div className="small-width mx-auto">
+				<label htmlFor="instruction-input">Instructions</label>
+				{instructions}
+			</div>
 		</div>;
 	}
 }
 
-export default AddRecipe;
+export default RecipeForm;

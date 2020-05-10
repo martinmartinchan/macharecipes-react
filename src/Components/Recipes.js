@@ -47,7 +47,7 @@ class Recipes extends Component {
 			listedRecipes = this.state.filteredRecipes;
 		}
 		return (
-			<div>
+			<div className="mt-3">
 				<SearchBar
 				recipes = {this.props.recipes}
 				setShowFiltered = {(showFiltered, recipes) => this.setShowFiltered(showFiltered, recipes)}
