@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class SingleRecipe extends Component {
 	findRecipe(recipeName) {
@@ -58,13 +59,11 @@ class SingleRecipe extends Component {
 				</div>
 				<div className="d-flex flex-column align-items-end">
 					<div className="form-group mt-3">
-						<button className="btn btn-primary mr-3" 
-							onClick={e => {
-								this.props.editRecipe(recipe)
-								e.preventDefault();
-						}}>
-							Edit Recipe
-						</button>
+						<Link to = {`/edit/${recipe.name}`}>
+							<button className="btn btn-primary mr-3">
+								Edit Recipe
+							</button>
+						</Link>
 						<button className="btn btn-danger" 
 							onClick={e => {
 								if(window.confirm("Are you sure you want to delete this recipe?")) {

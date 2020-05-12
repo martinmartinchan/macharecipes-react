@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, withRouter, Switch, Route, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Recipes from './Recipes';
 import AddRecipe from './AddRecipe';
@@ -11,7 +11,6 @@ import { getEmptyRecipe, checkRecipeValidity } from './../services/helper';
 class App extends Component {
   constructor(props) {
     super(props);
-    // If there is a status message saved in the sessionStorage, it means we should show it and it is a success
     this.state = {
       loading: true,
       recipes: {},
@@ -27,11 +26,6 @@ class App extends Component {
   componentDidMount() {
     // Retrieve all recipes from database
     this.getAllRecipes();
-    // If there is a status message saved in the sessionStorage, it means we should show it and it is a success
-    const statusMessage = sessionStorage.getItem('statusMessage');
-    if (statusMessage) {
-      this.showStatus(true, statusMessage);
-    }
   }
 
   // Sets the status for 5 seconds
@@ -80,9 +74,12 @@ class App extends Component {
         addRecipe(this.state.addRecipe)
         .then(data => {
           if (data.success) {
-            // We will refresh page after this and thus, sessionStorage needs to be set to show status after refresh
-            sessionStorage.setItem("statusMessage", data.message);
+            this.setState({
+              loading: false,
+              recipes: data.result,
+            });
             this.showRecipe(this.state.addRecipe);
+            this.showStatus(true, data.message);
           } else {
             this.setState({
               loading: false,
@@ -108,9 +105,12 @@ class App extends Component {
         editRecipe(oldRecipeName, newRecipe)
         .then(data => {
           if (data.success) {
-            // We will refresh page after this and thus, sessionStorage needs to be set to show status after refresh
-            sessionStorage.setItem("statusMessage", data.message);
+            this.setState({
+              loading: false,
+              recipes: data.result,
+            });
             this.showRecipe(newRecipe);
+            this.showStatus(true, data.message)
           } else {
             this.setState({
               loading: false,
@@ -136,11 +136,11 @@ class App extends Component {
       .then(data => {
         console.log(data);
         if(data.success) {
-          sessionStorage.setItem("statusMessage", data.message);
           this.setState({
             loading: false,
+            recipes: data.result,
           });
-          window.location.pathname = '/';
+          this.props.history.push('/');
         } else {
           this.setState({
             loading: false,
@@ -152,12 +152,8 @@ class App extends Component {
     });
   }
 
-  editRecipe(recipe) {
-    window.location.pathname = `/edit/${recipe.name}`;
-  }
-
   showRecipe(recipe) {
-    window.location.pathname = `/recipe/${recipe.name}`;
+    this.props.history.push(`/recipe/${recipe.name}`);
   }
 
   render() {
@@ -199,7 +195,6 @@ class App extends Component {
               {...routerProps}
               recipes = {this.state.recipes}
               deleteRecipe = {(recipe) => this.deleteRecipe(recipe)}
-              editRecipe = {(recipe) => this.editRecipe(recipe)}
             />
           }
         />
@@ -216,25 +211,23 @@ class App extends Component {
       </Switch>;
     }
     return (
-      <Router>
-        <div className="container mb-5">
-          <div className="navbar align-middle navbar-expand bg-dark">
-            <Link to = "/" className="no-decor nav-item navbar-nav mr-auto text-white">
-              <img id="logo" src='/logo.png' alt="Logo"/>
-            </Link>
-            <Link to = "/" className="no-decor nav-item navbar-nav ml-3 text-white">
-                Recipes
-            </Link>
-            <Link to = "/add" className="no-decor nav-item navbar-nav ml-3 text-white">
-                Add Recipe
-            </Link>
-          </div>
-          {status}
-          {content}
+      <div className="container mb-5">
+        <div className="navbar align-middle navbar-expand bg-dark">
+          <Link to = "/" className="no-decor nav-item navbar-nav mr-auto text-white">
+            <img id="logo" src='/logo.png' alt="Logo"/>
+          </Link>
+          <Link to = "/" className="no-decor nav-item navbar-nav ml-3 text-white">
+              Recipes
+          </Link>
+          <Link to = "/add" className="no-decor nav-item navbar-nav ml-3 text-white">
+              Add Recipe
+          </Link>
         </div>
-      </Router>
+        {status}
+        {content}
+      </div>
     )
   }
 }
 
-export default App;
+export default withRouter(App);
