@@ -43,8 +43,8 @@ class SingleRecipe extends Component {
 				<h1>{recipe.name}</h1>
 				<h5>Servings: {recipe.servings}</h5>
 				<p>{recipe.description}</p>
-				<div className="d-flex align-items-stretch flex-wrap flex-sm-nowrap mt-3">
-					<div className="max-width-large-screen flex-sm-grow-0">
+				<div className="d-flex align-items-stretch flex-wrap flex-md-nowrap mt-3">
+					<div className="width-large-screen flex-md-grow-0">
 						<h5>Ingredients</h5>
 						<table className="table">
 							<tbody>

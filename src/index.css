@@ -77,10 +77,6 @@
   background-color: rgba(238, 238, 238, 0.35);
 }
 
-.max-width-large-screen {
-  min-width: 200px;
-}
-
 table {
   table-layout: fixed;
 }
@@ -98,8 +94,11 @@ table {
   .small-width {
     width: 75%;
   }
+}
 
-  .max-width-large-screen {
-    max-width: 350px;
+@media screen and (min-width: 768px) {
+  .width-large-screen {
+    min-width: 300px;
+    max-width: 450px;
   }
 }
