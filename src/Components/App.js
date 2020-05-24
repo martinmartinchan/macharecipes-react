@@ -213,7 +213,7 @@ class App extends Component {
     return (
       <div className="container mb-5">
         <div className="navbar align-middle navbar-expand bg-dark">
-          <Link to = "/" className="no-decor nav-item navbar-nav mr-auto text-white">
+          <Link to = "/" className="no-decor nav-item navbar-nav mr-auto text-white flex-start">
             <img id="logo" src='/logo.png' alt="Logo"/>
           </Link>
           <Link to = "/" className="no-decor nav-item navbar-nav ml-3 text-white">

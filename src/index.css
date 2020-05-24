@@ -32,6 +32,10 @@
   cursor: pointer;
 }
 
+.flex-start {
+  align-items: flex-start;
+}
+
 .cursor-pointer:hover {
   cursor: pointer;
 }
